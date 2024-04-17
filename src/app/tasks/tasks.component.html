@@ -1,0 +1,58 @@
+<div class="container">
+  <h1>To Do List</h1>
+  <hr>
+  <form>
+    <div class="form-group">
+      <label for="Name">Task Title</label>
+      <input type="text" class="form-control" [(ngModel)]="taskName" id="Name" placeholder="Enter task Name" name="taskName">
+      <label for="required" id="required" *ngIf="!taskName.trim()">Required</label>
+    </div>
+    <div class="form-group">
+      <label for="Description">Task Description</label>
+      <input type="text" class="form-control" [(ngModel)]="taskDesc" id="Description" placeholder="Enter task description" name="Description">
+    </div>
+    <div class="form-group">
+      <label for="Date">Task Due Date</label>
+      <input type="date" class="form-control" [(ngModel)]="taskDate" id="Date" placeholder="Enter task due date" name="Date">
+      <label for="required" id="required" *ngIf="!taskDate.trim()">Required</label>
+    </div>
+    <div class="center-container">
+      <button id="addButton" class="btn btn-primary" [disabled]="isEditingTaskIndex !== null" (click)="addTask()">Add Task</button>
+    </div>
+  </form>
+  <hr>
+  <table class="table">
+    <thead>
+      <tr class="tablehead">
+        <th scope="col">Task Name</th>
+        <th scope="col">Task Description</th>
+        <th scope="col">Due Date</th>
+        <th scope="col">Status</th>
+        <th scope="col">Delete</th>
+        <th scope="col">Edit/Save</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks; let i = index">
+        <td>{{ task.name }}</td>
+        <td>{{ task.description }}</td>
+        <td>{{ task.dueDate }}</td>
+        <td>
+          <input type="checkbox" [checked]="task.isCompleted" (change)="toggleCompletion(i)">
+          <span *ngIf="task.isCompleted">Completed</span>
+          <span *ngIf="!task.isCompleted">Pending</span>
+        </td>
+        <td><button class="btn btn-danger btn-sm" (click)="deleteTask(i)">Delete</button></td>
+        <td>
+          <ng-container *ngIf="isEditingTaskIndex === i; else editButton">
+            <button class="btn btn-success" (click)="saveOrCancelEdit()">Save</button>
+            <button class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+          </ng-container>
+          <ng-template #editButton>
+            <button class="btn btn-warning" (click)="editTask(i)">Edit</button>
+          </ng-template>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
